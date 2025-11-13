@@ -28,7 +28,7 @@ def q_2():
     # Reindex to include all days in March, fill missing with -1
     result = daily_counts.reindex(full_march_dates, fill_value=-1)
 
-    return result
+    return result.values
 
 
 def q_3():
@@ -49,7 +49,7 @@ def q_3():
     # Round to integers
     result = result.round().astype(int)
 
-    return result
+    return result.values
 
 
 def q_4():
