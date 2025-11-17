@@ -57,9 +57,10 @@ def q_4():
     # Query for March 2024
     march_data = df.query('timestamp >= "2024-03-01" and timestamp < "2024-04-01"')
 
-    # Add week column
+    # Add week column based on day of month (1-7: week1, 8-14: week2, etc.)
     march_data = march_data.copy()
-    march_data['week'] = march_data['timestamp'].dt.isocalendar().week
+    march_data['day'] = march_data['timestamp'].dt.day
+    march_data['week'] = ((march_data['day'] - 1) // 7) + 1
 
     # Count by week and side
     weekly_side_counts = march_data.groupby(['week', 'side']).size().unstack(fill_value=0)
@@ -67,6 +68,9 @@ def q_4():
     # Create stacked bar chart
     fig, ax = plt.subplots(figsize=(10, 6))
     weekly_side_counts.plot(kind='bar', stacked=True, ax=ax)
+
+    # Set x-axis labels to 'week1', 'week2', etc.
+    ax.set_xticklabels([f'week{int(w)}' for w in weekly_side_counts.index], rotation=0)
 
     ax.set_xlabel('Week')
     ax.set_ylabel('Count')
